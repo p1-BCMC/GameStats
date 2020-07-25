@@ -191,9 +191,7 @@
 		sendMessage = combineFunctions(sendMessage, updateTimeOfLastAction);
 
 		function shiftGameStatsLeft() {
-			console.log("shiftLeft reached");
 			let newShiftAmount = world.stage.side.children[world.stage.side.numChildren - 1].width * world.stage.side.children[world.stage.side.numChildren - 1].scale + defaultShiftAmount;
-			console.log(newShiftAmount);
 			world.stage.hero.children[0].getChildByName("gameStats").setTransform(world.stage.width - newShiftAmount, 5);
 			world.stage.hero.children[0].getChildByName("gameStatsOverlay").setTransform(world.stage.width - newShiftAmount, 5);
 
@@ -207,7 +205,6 @@
 		};
 
 		function shiftGameStatsBack() {
-			console.log("shiftBack reached");
 			world.stage.hero.children[0].getChildByName("gameStats").setTransform(world.stage.width - defaultShiftAmount, 5);
 			world.stage.hero.children[0].getChildByName("gameStatsOverlay").setTransform(world.stage.width - defaultShiftAmount, 5);
 			updateTimeOfLastAction();
