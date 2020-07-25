@@ -2,7 +2,7 @@
 // @name         Game Stats
 // @namespace    p1
 // @run-at       document-start
-// @version      0.1
+// @version      0.2
 // @description  Generates some useful stats in the right top corner of the game, showing Frames per Second (FPS), Ping to the server (PING), Critters in current Room (CIR), and Total Amount of Critters online (ON)!
 // @author       p1
 // @match        https://boxcritters.com/play/
@@ -33,6 +33,8 @@
 		let roomPlayerCount = 0;
 		let currentFPS = 0;
 		let heroVisible = true;
+		let gameStatsAreShiftedLeft = false;
+		let defaultShiftAmount = 105;
 
 		/* We override the "pop" event, as it’s not gonna be used anymore anyways */
 		world._events.pop[0] = function(playerCount) {
@@ -72,7 +74,7 @@
 		world.stage.hero.children[0].children[0].name = "Coins";
 
 		let gameStatsCardObject = new box.Card(80, 60);
-		gameStatsCardObject.setTransform(750, 5);
+		gameStatsCardObject.setTransform(world.stage.width - defaultShiftAmount, 5);
 		gameStatsCardObject.name = "gameStats";
 		let gameStatsBackgroundImage = new createjs.Bitmap("https://raw.githubusercontent.com/p1-BCMC/GameStats/master/StatsContainer.png");
 		gameStatsBackgroundImage.setTransform(0, 0, 0.3, 0.3);
@@ -138,7 +140,7 @@
 		world.stage.hero.children[0].addChild(gameStatsCardObject);
 
 		let gameStatsOverlayObject = new box.Card(80, 60);
-		gameStatsOverlayObject.setTransform(750, 5);
+		gameStatsOverlayObject.setTransform(world.stage.width - defaultShiftAmount, 5);
 		gameStatsOverlayObject.name = "gameStatsOverlay";
 		let gameStatsOverlayGraphicSettings = new createjs.Graphics();
 		gameStatsOverlayGraphicSettings.beginFill("#000000");
@@ -187,6 +189,32 @@
 		};
 
 		sendMessage = combineFunctions(sendMessage, updateTimeOfLastAction);
+
+		function shiftGameStatsLeft() {
+			console.log("shiftLeft reached");
+			let newShiftAmount = world.stage.side.children[world.stage.side.numChildren - 1].width * world.stage.side.children[world.stage.side.numChildren - 1].scale + defaultShiftAmount;
+			console.log(newShiftAmount);
+			world.stage.hero.children[0].getChildByName("gameStats").setTransform(world.stage.width - newShiftAmount, 5);
+			world.stage.hero.children[0].getChildByName("gameStatsOverlay").setTransform(world.stage.width - newShiftAmount, 5);
+
+			world.stage.side.children[0].children.forEach(child => {
+				if (child._listeners != undefined) {
+					child._listeners.click[0] = combineFunctions(shiftGameStatsBack, child._listeners.click[0]);
+				};
+			});
+
+			updateTimeOfLastAction();
+		};
+
+		function shiftGameStatsBack() {
+			console.log("shiftBack reached");
+			world.stage.hero.children[0].getChildByName("gameStats").setTransform(world.stage.width - defaultShiftAmount, 5);
+			world.stage.hero.children[0].getChildByName("gameStatsOverlay").setTransform(world.stage.width - defaultShiftAmount, 5);
+			updateTimeOfLastAction();
+		};
+
+		world.showShop = combineFunctions(world.showShop, shiftGameStatsLeft);
+		world.showChat = combineFunctions(world.showChat, shiftGameStatsLeft);
 
 		world.on("joinRoom", function() {
 
