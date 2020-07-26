@@ -2,7 +2,9 @@
 // @name         Game Stats
 // @namespace    p1
 // @run-at       document-start
-// @version      0.3
+// @version      0.4
+// @updateURL    https://github.com/p1-BCMC/GameStats/raw/master/GameStats.user.js
+// @downloadURL  https://github.com/p1-BCMC/GameStats/raw/master/GameStats.user.js
 // @description  Generates some useful stats in the right top corner of the game, showing Frames per Second (FPS), Ping to the server (PING), Critters in current Room (CIR), and Total Amount of Critters online (ON)!
 // @author       p1
 // @match        https://boxcritters.com/play/
