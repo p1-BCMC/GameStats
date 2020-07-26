@@ -2,7 +2,7 @@
 // @name         Game Stats
 // @namespace    p1
 // @run-at       document-start
-// @version      0.2
+// @version      0.3
 // @description  Generates some useful stats in the right top corner of the game, showing Frames per Second (FPS), Ping to the server (PING), Critters in current Room (CIR), and Total Amount of Critters online (ON)!
 // @author       p1
 // @match        https://boxcritters.com/play/
@@ -12,6 +12,7 @@
 // @match        https://boxcritters.com/play/index.html?*
 // @match        https://boxcritters.com/play/index.html#*
 // @grant        none
+// @require      https://github.com/SArpnt/joinFunction/raw/master/script.js
 // ==/UserScript==
 
 (function() {
@@ -179,16 +180,7 @@
 			hideShowHero();
 		});
 
-		/* Credits to SArpnt for his general version of this function, https://github.com/SArpnt/joinFunction/blob/master/script.js */
-		function combineFunctions(function1, function2) {
-			function combinedFunction(...parameters) {
-				function1.apply(this, parameters);
-				function2.apply(this, parameters);
-			};
-			return combinedFunction;
-		};
-
-		sendMessage = combineFunctions(sendMessage, updateTimeOfLastAction);
+		sendMessage = joinFunction(sendMessage, updateTimeOfLastAction);
 
 		function shiftGameStatsLeft() {
 			let newShiftAmount = world.stage.side.children[world.stage.side.numChildren - 1].width * world.stage.side.children[world.stage.side.numChildren - 1].scale + defaultShiftAmount;
@@ -197,7 +189,9 @@
 
 			world.stage.side.children[0].children.forEach(child => {
 				if (child._listeners != undefined) {
-					child._listeners.click[0] = combineFunctions(shiftGameStatsBack, child._listeners.click[0]);
+					if (child.children[0].image.currentSrc == "https://boxcritters.com/images/buttons/close.png") {
+						child._listeners.click[0] = joinFunction(shiftGameStatsBack, child._listeners.click[0]);
+					};
 				};
 			});
 
@@ -210,8 +204,8 @@
 			updateTimeOfLastAction();
 		};
 
-		world.showShop = combineFunctions(world.showShop, shiftGameStatsLeft);
-		world.showChat = combineFunctions(world.showChat, shiftGameStatsLeft);
+		world.showShop = joinFunction(world.showShop, shiftGameStatsLeft);
+		world.showChat = joinFunction(world.showChat, shiftGameStatsLeft);
 
 		world.on("joinRoom", function() {
 
