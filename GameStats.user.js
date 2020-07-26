@@ -189,8 +189,10 @@
 
 			world.stage.side.children[0].children.forEach(child => {
 				if (child._listeners != undefined) {
-					if (child.children[0].image.currentSrc == "https://boxcritters.com/images/buttons/close.png") {
-						child._listeners.click[0] = joinFunction(shiftGameStatsBack, child._listeners.click[0]);
+					if (child.children[0].image != undefined) {
+						if (child.children[0].image.currentSrc == "https://boxcritters.com/images/buttons/close.png") {
+							child._listeners.click[0] = joinFunction(shiftGameStatsBack, child._listeners.click[0]);
+						};
 					};
 				};
 			});
