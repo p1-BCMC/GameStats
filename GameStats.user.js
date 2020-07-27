@@ -28,6 +28,10 @@
 	}, 1000/60);
 
 	function onWorldLoaded() {
+		
+		/* Set update frequency of game to update frequency of screen */
+		createjs.Ticker.timingMode = createjs.Ticker.RAF;
+		
 		let playerIsAFK = false;
 		let timeOfLastAction = performance.now();
 		let timeOfLastPing = performance.now();
